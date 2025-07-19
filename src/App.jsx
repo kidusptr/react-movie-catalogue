@@ -1,5 +1,3 @@
-import "./App.css";
-
 const Card = ({ title }) => {
   return <h2>{title}</h2>;
 };
