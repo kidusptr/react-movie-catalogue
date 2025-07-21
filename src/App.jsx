@@ -1,27 +1,27 @@
 import React, { useState } from "react";
 
 const Card = ({ title, hasliked, onClick }) => {
+  const [liked, setLiked] = useState(hasliked || false);
   return (
-    <div
-      className="card"
-      style={{ backgroundColor: hasliked ? "red" : "green" }}
-      onClick={onClick}
-    >
+    <div className="card" onClick={onClick}>
       <h2>{title}</h2>
+      <button
+        onClick={() => {
+          setLiked(!liked);
+        }}
+      >
+        {liked ? "❤️" : "🤍"}
+      </button>
     </div>
   );
 };
 const App = () => {
-  const [hasliked, setHasliked] = useState(false);
-  const toggleLike = () => {
-    setHasliked(!hasliked);
-  };
   return (
     <div className="card-container">
-      <Card title="Iron Man" hasliked={hasliked} onClick={toggleLike} />
-      <Card title="Captain America" hasliked={hasliked} onClick={toggleLike} />
-      <Card title="Thor" hasliked={hasliked} onClick={toggleLike} />
-      <Card title="Hulk" hasliked={hasliked} onClick={toggleLike} />
+      <Card title="Iron Man" />
+      <Card title="Captain America" />
+      <Card title="Thor" />
+      <Card title="Hulk" />
     </div>
   );
 };
