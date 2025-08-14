@@ -1,28 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 
-const Card = ({ title, hasliked, onClick }) => {
-  const [liked, setLiked] = useState(hasliked || false);
-  return (
-    <div className="card" onClick={onClick}>
-      <h2>{title}</h2>
-      <button
-        onClick={() => {
-          setLiked(!liked);
-        }}
-      >
-        {liked ? "❤️" : "🤍"}
-      </button>
-    </div>
-  );
-};
 const App = () => {
   return (
-    <div className="card-container">
-      <Card title="Iron Man" />
-      <Card title="Captain America" />
-      <Card title="Thor" />
-      <Card title="Hulk" />
-    </div>
+    <main>
+      <div className="pattern" />
+      <div className="wrapper">
+        <header>
+          <h1>
+            Find <span className="text-gradient">Movies</span> You'll enjoy
+            without the hustle
+          </h1>
+        </header>
+      </div>
+    </main>
   );
 };
 
