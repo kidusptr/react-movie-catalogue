@@ -57,15 +57,17 @@ const App = () => {
           {isLoading ? (
             <p>Loading...</p>
           ) : (
-            movieList.map((movie) => (
-              <div key={movie.id} className="movie-item">
-                <img
-                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                  alt={movie.title}
-                />
-                <h2>{movie.title}</h2>
-              </div>
-            ))
+            <ul>
+              {movieList.map((movie) => (
+                <div key={movie.id} className="movie-item">
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    alt={movie.title}
+                  />
+                  <h2>{movie.title}</h2>
+                </div>
+              ))}
+            </ul>
           )}
         </section>
       </div>
