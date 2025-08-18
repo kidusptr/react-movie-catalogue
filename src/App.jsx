@@ -13,20 +13,27 @@ const API_OPTIONS = {
 const App = () => {
   // Main application component
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [movieList, setMovieList] = useState([]);
 
   const fetchMovies = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch(
         `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`,
         API_OPTIONS
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
+        setMovieList([]);
       }
       const data = await response.json();
       console.log(data);
+      setMovieList(data.results);
     } catch (error) {
       console.error("Fetch error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -44,8 +51,23 @@ const App = () => {
             Find <span className="text-gradient">Movies</span> You'll enjoy
             without the hustle
           </h1>
+          <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
-        <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        <section className="movie-list">
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : (
+            movieList.map((movie) => (
+              <div key={movie.id} className="movie-item">
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  alt={movie.title}
+                />
+                <h2>{movie.title}</h2>
+              </div>
+            ))
+          )}
+        </section>
       </div>
       <h1 className="text-white text-3xl">{searchTerm}</h1>
     </main>
