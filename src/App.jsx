@@ -1,4 +1,5 @@
-import Search from "./components/search";
+import Search from "./components/Search";
+import Spinner from "./components/Spinner";
 import { useState, useEffect } from "react";
 
 const API_BASE_URL = "https://api.themoviedb.org/3";
@@ -10,10 +11,11 @@ const API_OPTIONS = {
     Authorization: `Bearer ${API_KEY}`,
   },
 };
+
 const App = () => {
   // Main application component
   const [searchTerm, setSearchTerm] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [movieList, setMovieList] = useState([]);
 
   const fetchMovies = async () => {
@@ -24,8 +26,8 @@ const App = () => {
         API_OPTIONS
       );
       if (!response.ok) {
-        throw new Error("Network response was not ok");
         setMovieList([]);
+        throw new Error("Network response was not ok");
       }
       const data = await response.json();
       console.log(data);
@@ -33,7 +35,7 @@ const App = () => {
     } catch (error) {
       console.error("Fetch error:", error);
     } finally {
-      setIsLoading(false);
+      setIsLoading(true);
     }
   };
 
@@ -53,9 +55,10 @@ const App = () => {
           </h1>
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
-        <section className="movie-list">
+        <section className="all-movies">
+          <h2>All Movies</h2>
           {isLoading ? (
-            <p>Loading...</p>
+            <Spinner />
           ) : (
             <ul>
               {movieList.map((movie) => (
