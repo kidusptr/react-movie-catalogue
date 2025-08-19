@@ -1,3 +1,4 @@
+import MovieCard from "./components/MovieCard";
 import Search from "./components/Search";
 import Spinner from "./components/Spinner";
 import { useState, useEffect } from "react";
@@ -15,7 +16,7 @@ const API_OPTIONS = {
 const App = () => {
   // Main application component
   const [searchTerm, setSearchTerm] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [movieList, setMovieList] = useState([]);
 
   const fetchMovies = async () => {
@@ -35,7 +36,7 @@ const App = () => {
     } catch (error) {
       console.error("Fetch error:", error);
     } finally {
-      setIsLoading(true);
+      setIsLoading(false);
     }
   };
 
@@ -56,19 +57,13 @@ const App = () => {
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
         <section className="all-movies">
-          <h2>All Movies</h2>
+          <h2 className="mt-[40px]">All Movies</h2>
           {isLoading ? (
             <Spinner />
           ) : (
             <ul>
               {movieList.map((movie) => (
-                <div key={movie.id} className="movie-item">
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                    alt={movie.title}
-                  />
-                  <h2>{movie.title}</h2>
-                </div>
+                <MovieCard key={movie.id} movie={movie} />
               ))}
             </ul>
           )}
