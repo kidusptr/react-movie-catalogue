@@ -41,7 +41,10 @@ const App = () => {
       const data = await response.json();
       console.log(data);
       setMovieList(data.results);
-      updateSearchCount();
+
+      if (query && data.results.length > 0) {
+        await updateSearchCount(query, data.results[0]);
+      }
     } catch (error) {
       console.error("Fetch error:", error);
     } finally {
