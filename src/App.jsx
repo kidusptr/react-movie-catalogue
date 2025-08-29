@@ -24,7 +24,7 @@ const App = () => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
   // Debounce the search term to avoid excessive API calls
-  useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm]);
+  useDebounce(() => setDebouncedSearchTerm(searchTerm), 1000, [searchTerm]);
 
   const fetchMovies = async (query) => {
     try {
@@ -83,24 +83,21 @@ const App = () => {
           </h1>
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
+        {trendingMovies.length > 0 && (
+          <section className="trending">
+            <h2>Trending Movies</h2>
+
+            <ul>
+              {trendingMovies.map((movie, index) => (
+                <li key={movie.$id}>
+                  <p>{index + 1}</p>
+                  <img src={movie.poster_url} alt={movie.title} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
         <section className="all-movies">
-          {trendingMovies.length > 0 && (
-            <section className="trending">
-              <h2>Trending Movies</h2>
-              <div className="trending-list">
-                {trendingMovies.map((movie) => (
-                  <div key={movie.$id} className="trending-item">
-                    <img
-                      src={movie.poster_url}
-                      alt={movie.searchTerm}
-                      title={movie.searchTerm}
-                    />
-                    <p>{movie.searchTerm}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
           <h2>All Movies</h2>
           {isLoading ? (
             <Spinner />
