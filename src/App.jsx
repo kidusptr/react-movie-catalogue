@@ -3,7 +3,7 @@ import Search from "./components/Search";
 import Spinner from "./components/Spinner";
 import { useState, useEffect } from "react";
 import { useDebounce } from "react-use";
-import { updateSearchCount } from "./appwrite";
+import { getTrendingMovies, updateSearchCount } from "./appwrite";
 
 const API_BASE_URL = "https://api.themoviedb.org/3";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -20,6 +20,7 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [movieList, setMovieList] = useState([]);
+  const [trendingMovies, setTrendingMovies] = useState([]);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
   // Debounce the search term to avoid excessive API calls
@@ -52,9 +53,23 @@ const App = () => {
     }
   };
 
+  const fetchTrendingMovies = async () => {
+    try {
+      const response = await getTrendingMovies();
+      setTrendingMovies(response);
+      console.log("Trending movies:", response);
+    } catch (error) {
+      console.error("Error fetching trending movies:", error);
+    }
+  };
+
   useEffect(() => {
     fetchMovies(searchTerm);
   }, [debouncedSearchTerm]);
+
+  useEffect(() => {
+    fetchTrendingMovies();
+  }, []);
 
   return (
     <main>
@@ -69,7 +84,24 @@ const App = () => {
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
         <section className="all-movies">
-          <h2 className="mt-[40px]">All Movies</h2>
+          {trendingMovies.length > 0 && (
+            <section className="trending">
+              <h2>Trending Movies</h2>
+              <div className="trending-list">
+                {trendingMovies.map((movie) => (
+                  <div key={movie.$id} className="trending-item">
+                    <img
+                      src={movie.poster_url}
+                      alt={movie.searchTerm}
+                      title={movie.searchTerm}
+                    />
+                    <p>{movie.searchTerm}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+          <h2>All Movies</h2>
           {isLoading ? (
             <Spinner />
           ) : (
